@@ -1,0 +1,39 @@
+kind: containerapp
+location: eastus2
+name: test-consumer
+resourceGroup: tigrans_resource_group
+type: Microsoft.App/containerApps
+tags:
+  tester: tigran
+properties:
+  managedEnvironmentId: /subscriptions/e11b0256-c006-489e-a73c-ca69e2352627/resourceGroups/tigrans_resource_group/providers/Microsoft.App/managedEnvironments/tigrans-env
+  configuration:
+    activeRevisionsMode: Multiple
+    secrets:
+      - name: sb-connection-string
+        value: Endpoint=sb://service-bus-forest.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=3+G7a7hqJ0LXAHfGKFUZ0k2CBN0H1Qtm7oE/FvQahtM=
+      - name: registry-password
+        value: a=xYYy/8qx6KuqoIosjLgsKLY0wHoIAp
+
+    registries:
+        - passwordSecretRef: registry-password
+          server: tigransacr.azurecr.io
+          username: tigransacr
+  template:
+    revisionSuffix: rev
+    containers:
+      - image: tigransacr.azurecr.io/consumer_image:v1
+        name: consumer
+        env:
+          - name: SB_QUEUE_NAME
+            value: test-1
+          - name: SB_CONNECTION_STRING
+            secretRef: sb-connection-string
+        resources:
+          cpu: 0.5
+          memory: 1Gi
+        
+    scale:
+      minReplicas: 5
+      maxReplicas: 20
+      pollingInterval: 10

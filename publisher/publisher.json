@@ -1,0 +1,55 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "value": "e11b0256-c006-489e-a73c-ca69e2352627"
+        },
+        "name": {
+            "value": "test-publisher"
+        },
+        "location": {
+            "value": "eastus2"
+        },
+        "environmentId": {
+            "value": "/subscriptions/e11b0256-c006-489e-a73c-ca69e2352627/resourceGroups/tigrans_resource_group/providers/Microsoft.App/managedEnvironments/tigrans-env"
+        },
+        "containers": {
+            "value": [
+                {
+                    "name": "publisher",
+                    "image": "redacted.azurecr.io/detect-entities:v1.1.71",
+                    "command": [],
+                    "resources": {
+                        "cpu": ".25",
+                        "memory": ".5Gi"
+                    }
+                }
+            ]
+        },
+        "registries": {
+            "value": [
+                {
+                    "server": "redacted.azurecr.io",
+                    "username": "redacted",
+                    "passwordSecretRef": "reg-pswd-8fd711d8-9329"
+                }
+            ]
+        },
+        "secrets": {
+            "value": [
+                {
+                    "name": "reg-pswd-8fd711d8-9329",
+                    "value": "6oDyjuiABc15fvuLZwBNlEnq1WxuR+ea"
+                }
+            ]
+        },
+        "ingress": {
+            "value": {
+                "external": true,
+                "targetPort": "8000",
+                "transport": "auto"
+            }
+        }
+    }
+}
